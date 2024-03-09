@@ -1,0 +1,276 @@
+$("#48704924165bf8d45c74c79007797641").hide();
+
+$("#15748990565bd0c2d689494086836548 , #34376130965af66606b5d39032984547 , #39598767665af6504477025015044246 , #95796324265af511cd9f8b0076483650").hide();
+
+//.........................
+
+
+function actual(){
+
+
+  var rad_Applicant=$("#rad_Applicant").getValue();
+  if(rad_Applicant=='1'){
+
+    var data_array=[];
+    data_array.push($("#act_txt_National_Code_a").getValue());
+    data_array.push($("#act_txt_name_and_surname").getValue());
+    data_array.push($("#act_txt_Mobile_number_a").getValue());
+
+
+  }
+  $.ajax({ 
+    type: "POST",
+    url: window.location,
+    dataType: "text",
+    data: {
+      data_array: data_array,
+      act:"add_actual"
+    },
+    async: false,
+    success: function (data) {
+      if (data == '1') {
+        dispAlert('داده ها با موفقیت ثبت شد','yellow');
+
+      }
+      else if (data == 'Duplicate') {
+        dispAlert('نام محصول تکراری است.');
+      }
+      else {
+        dispAlert('وقوع خطا در ثبت!');
+      }
+    },
+    error: function(a,b,c) {alert(c);}
+  });
+}
+
+
+//..............................
+
+
+$("#btn_record").click(function(){
+  actual();
+  legal();
+
+}).find('button').addClass('btn-success');
+
+function Register(){  
+
+  var nationalCode = $("#act_txt_National_Code_a").getValue();
+  var postalCode = $("#txt_Postal_code").getValue();
+
+  if (nationalCode == postalCode) {
+    dispAlert('کد ملی و کد پستی نمی توانند یکسان باشند.');
+    $("#act_txt_National_Code_a, #txt_Postal_code").css("border", "1px solid red");
+    return;
+  }
+
+  var data_array=[];
+  data_array.push(nationalCode);
+  data_array.push(postalCode);
+
+
+
+  $.ajax({ 
+    type: "POST",
+    url: window.location,
+    dataType: "text",
+    data: {
+      data_array: data_array,
+      act: "add_Register"
+    },
+    async: false,
+    success: function (data) {
+      console.log(data);
+      if (data == '1') {
+        var form_id = $("form").prop('id');
+        $("#"+form_id).submit();
+        dispAlert('داده ها با موفقیت ثبت شد','yellow');
+
+      }
+      else if (data == 'Duplicate') {
+        dispAlert('کد ملی تکراری است');
+        dispAlert('کد پستی تکراری است');
+        $("#act_txt_National_Code_a, #txt_Postal_code").css("border", "1px solid red");
+        return;
+      }
+      else {
+        dispAlert('وقوع خطا در ثبت!');
+      }
+    },
+    error: function(a,b,c) {alert(c);}
+  });
+}
+
+
+//.............................................
+
+function legal_info(newVal)
+{
+  const legal = (newVal == '2');
+  legalFields = $("[id^='leg_']");
+  for(field in legalFields)
+  {
+    if(legalFields[field].getAttribute)
+    {
+      const id = legalFields[field].getAttribute('id');
+      legal ? $('#'+id).enableValidation() : $('#'+id).disableValidation();
+      legal ? $('#'+id).show() : $('#'+id).hide();
+    }
+  }
+}
+
+
+function actual_info(newVal)
+{
+  const actual = (newVal == '1');
+  actualFields = $("[id^='act_']");
+  for(field in actualFields)
+  {
+    if(actualFields[field].getAttribute)
+    {
+      const id = actualFields[field].getAttribute('id');
+      actual ? $('#'+id).enableValidation() : $('#'+id).disableValidation();
+      actual ? $('#'+id).show() : $('#'+id).hide();
+    }
+  }
+}
+
+
+$("#rad_Applicant").setOnchange(function(){
+
+
+  var rad_Applicant=$("#rad_Applicant").getValue();
+  if(rad_Applicant=='1'){
+    $("#34376130965af66606b5d39032984547, #39598767665af6504477025015044246 , #95796324265af511cd9f8b0076483650").hide();
+    $("#34376130965af66606b5d39032984547, #39598767665af6504477025015044246 , #95796324265af511cd9f8b0076483650").disableValidation();
+    $("#15748990565bd0c2d689494086836548").show();
+
+  }
+
+  else  if(rad_Applicant=='2'){
+
+    $("#15748990565bd0c2d689494086836548").hide();
+    $("#15748990565bd0c2d689494086836548").disableValidation();
+    $("#34376130965af66606b5d39032984547, #39598767665af6504477025015044246 , #95796324265af511cd9f8b0076483650").show();
+
+  }
+
+  actual_info(rad_Applicant);
+  legal_info(rad_Applicant);
+});
+
+//............................
+
+
+function legal(){
+  var rad_Applicant=$("#rad_Applicant").getValue();
+  if(rad_Applicant=='2'){
+    var leg_txt_company_name = $("#leg_txt_company_name").getValue();
+    var leg_drp_company_type = $("#leg_drp_company_type").getValue();
+    var leg_txt_national_id = $("#leg_txt_national_id").getValue();
+
+    var leg_txt_economic_code = $("#leg_txt_economic_code").getValue();
+    var leg_txt_reg_number = $("#leg_txt_reg_number").getValue();
+    var leg_txt_regplace = $("#leg_txt_regplace").getValue();
+    var leg_dat_reg_date = $("#leg_dat_reg_date").getValue();
+    var leg_txt_statute_no = $("#leg_txt_statute_no").getValue();
+    var leg_dat_ad_date = $("#leg_dat_ad_date").getValue();
+    var leg_txt_ad_number = $("#leg_txt_ad_number").getValue();
+
+
+    if(leg_txt_company_name==""||leg_txt_company_name==null||leg_drp_company_type==""||leg_drp_company_type==null
+       ||leg_txt_national_id==""||leg_txt_national_id==null||leg_txt_economic_code==""||
+       leg_txt_economic_code==null||leg_txt_reg_number==""||leg_txt_reg_number==null||
+       leg_txt_regplace==""||leg_txt_regplace==null||leg_dat_reg_date==""||
+       leg_dat_reg_date==null||leg_txt_statute_no==""||leg_txt_statute_no==null||
+       leg_dat_ad_date==""||leg_dat_ad_date==null||leg_txt_ad_number==""||leg_txt_ad_number==null)
+    {
+      dispAlert("!لطفاً گزینه های اصلی را وارد بفرمایید");
+      return false;
+    }
+  }
+
+};
+
+
+//..........................
+
+function check_nationalcode(id){
+  var temp=$("#"+id).getValue();
+
+  if(temp=="")
+    return false;
+
+  if (!/^\d{10}$/.test(temp))
+  {        
+    new jBox('Notice', {
+      content: "کد ملی نامعتبر است",
+      color: 'red'
+    });
+    $("#"+id).getControl().css("borderColor", "red");
+    $("#"+id).getControl().focus();
+    $("#"+id).setValue("");
+    return;
+  }
+  var check = parseInt(temp[9]);
+  var sum = 0;
+  var i;
+  for (i = 0; i < 9; ++i) {
+    sum += parseInt(temp[i]) * (10 - i);
+  }
+  sum %= 11;
+  var r= (sum < 2 && check == sum) || (sum >= 2 && check + sum == 11);
+  if(r)
+  {
+    $("#"+id).getControl().css("borderColor", "");
+    // return;
+  }
+  else
+  {    
+    new jBox('Notice', {
+      content: "کد ملی نامعتبر است",
+      color: 'red'
+    });
+    $("#"+id).getControl().css("borderColor", "red");
+    $("#"+id).getControl().focus();
+    $("#"+id).setValue("");
+    return;
+  }
+}
+
+$("#act_txt_National_Code_a").setOnchange(function(newVal,oldVal){
+  check_nationalcode("act_txt_National_Code_a");
+});
+
+//...................................................
+
+
+/* تابع نمایش پیام به صورت نوتیفیکیشن: */
+function dispAlert(msg, color = 'yellow') {
+  try{
+    new jBox('Notice', {
+      position: {x: 'left',y: 'center'},
+      content: msg,
+      color: color
+    });
+  }catch(e){alert(msg);}
+}
+
+//...........................................................
+
+
+
+function addCssToGrids(){
+  var arr_elems = $('div[id] .pmdynaform-grid-thead');
+  for (let i = 0, p; i < arr_elems.length; i++) {
+    p = $(arr_elems[i]);
+    p.css('font-weight', 'bold');
+    p.find('.title-column').css('white-space', 'normal').css('width', '95%').css('margin-bottom', '-10px');
+    $(p.find('div.wildcard').first())
+      .css({'transform' : 'rotate(-90deg)'})
+      .css('margin-bottom', '20px').text('ردیف');
+  }
+}
+$(function(){
+  addCssToGrids();
+});
